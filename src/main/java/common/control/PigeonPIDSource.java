@@ -1,4 +1,4 @@
-package util;
+package common.control;
 
 
 import com.ctre.phoenix.sensors.PigeonIMU;
@@ -6,7 +6,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-public class PigeonWrapperRateAndAngle implements PIDSource {
+public class PigeonPIDSource implements PIDSource {
 	public static enum Units {
 		DEGS, RADS
 	}
@@ -14,8 +14,19 @@ public class PigeonWrapperRateAndAngle implements PIDSource {
 	private Units units;
 	
 	PigeonIMU gyro;
-	
-	public PigeonWrapperRateAndAngle(PigeonIMU gyro, PIDSourceType pidSource, Units units) {
+
+	/**
+	 * Create Pigeon PID Source with default Radians mode
+	 * @param gyro
+	 * @param pidSource
+	 */
+	public PigeonPIDSource(PigeonIMU gyro, PIDSourceType pidSource) {
+		this.gyro = gyro;
+		this.pidSource = pidSource;
+		this.units = Units.RADS;
+	}
+
+	public PigeonPIDSource(PigeonIMU gyro, PIDSourceType pidSource, Units units) {
 		this.gyro = gyro;
 		this.pidSource = pidSource;
 		this.units = units;
@@ -48,7 +59,7 @@ public class PigeonWrapperRateAndAngle implements PIDSource {
 		} else {
 			double[] xyz = new double[3];
 			gyro.getRawGyro(xyz);
-			
+
 			return (units == Units.RADS) ? Math.PI / 180 * -1 * xyz[2] : -1 * xyz[2];
 		}
 	}

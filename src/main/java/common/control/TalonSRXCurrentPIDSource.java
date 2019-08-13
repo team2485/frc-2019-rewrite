@@ -1,15 +1,15 @@
-package util;
+package common.control;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-public class TalonSRXCurrentWrapper implements PIDSource {
+public class TalonSRXCurrentPIDSource implements PIDSource {
 	
 	private TalonSRX canTalon;
 	
-	public TalonSRXCurrentWrapper(TalonSRX talonsrx) {
+	public TalonSRXCurrentPIDSource(TalonSRX talonsrx) {
 		this.canTalon = talonsrx;
 		
 	}

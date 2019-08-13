@@ -1,4 +1,4 @@
-package util;
+package common;
 
 import java.util.Arrays;
 
@@ -14,25 +14,25 @@ import edu.wpi.first.wpilibj.SpeedController;
  * @author Anoushka Bose
  * @author Jeremy McCulloch
  */
-public class SpeedControllerWrapper implements SpeedController {
+public class SpeedControllerGroup implements SpeedController {
 
 	private SpeedController[] speedControllerList;
 	private double[] scaleFactors;
 	private double upRampRate, downRampRate;
 	private double lastValue;
 
-	public SpeedControllerWrapper(SpeedController[] speedControllerList, double[] scaleFactors) {
+	public SpeedControllerGroup(SpeedController[] speedControllerList, double[] scaleFactors) {
 
 		this.speedControllerList = speedControllerList;
 		
 		setScaleFactors(scaleFactors);		
 	}
 
-	public SpeedControllerWrapper(SpeedController... speedControllerList) {
+	public SpeedControllerGroup(SpeedController... speedControllerList) {
 		this(speedControllerList, null);
 	}
 
-	public SpeedControllerWrapper(SpeedController speedController) {
+	public SpeedControllerGroup(SpeedController speedController) {
 		this(new SpeedController[] {speedController});
 	}
 	

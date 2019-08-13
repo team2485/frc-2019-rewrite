@@ -1,4 +1,4 @@
-package util;
+package common.control;
 
 import java.util.LinkedList;
 import java.util.Timer;
@@ -15,7 +15,7 @@ import edu.wpi.first.wpilibj.PIDSourceType;
  * @author Jeremy McCulloch
  * @author Nicholas Contreras
  */
-public class LidarWrapper extends SendableBase implements PIDSource {
+public class LidarPIDSource extends SendableBase implements PIDSource {
 
 	private I2C m_i2c;
 	private PIDSourceType pidSourceType;
@@ -25,21 +25,14 @@ public class LidarWrapper extends SendableBase implements PIDSource {
 	private static final int ROLLING_AVG_SAMPLE_SIZE = 25;
 	private static final int ROLLING_AVG_SAMPLE_RATE = 5;
 
-	private static final double CORRECTING_DIST = 33;
-
-	public static final int numSamples = 100000;
-	private double[] correctedDistances = new double[numSamples+1];
-
-	public LidarWrapper(Port port) {
-		m_i2c = new I2C(port, 0x62);
-		pidSourceType = PIDSourceType.kDisplacement;
+	public LidarPIDSource(Port port) {
+		this.m_i2c = new I2C(port, 0x62);
+		this.pidSourceType = PIDSourceType.kDisplacement;
 	}
 
-	public void init() {
-		for(int i = 0; i <= numSamples; i++) {
-			double dist = CORRECTING_DIST * i / numSamples;
-			correctedDistances[i] = -9.97 + (1.29 * dist) + (-0.000715 * dist * dist) + (-0.00000601* dist *dist *dist);
-		}
+	public LidarPIDSource(Port port, PIDSourceType pidSourceType) {
+		this.m_i2c = new I2C(port, 0x62);
+		this.pidSourceType = pidSourceType;
 	}
 
 	public int prepLidarForRateMesaurement() {
@@ -95,22 +88,6 @@ public class LidarWrapper extends SendableBase implements PIDSource {
 		return dist;
 	}
 
-	public double getDistanceCorrected() {
-		int index = (int) (this.getDistance()*numSamples / (CORRECTING_DIST));
-		index %= numSamples;
-		if (index < 0) {
-			index += numSamples;
-		}
-
-		double dist = this.getDistance();
-		if (dist < 33) {
-			dist = -9.97 + (1.29 * dist) + (-0.000715 * dist * dist) + (-0.00000601* dist *dist *dist); 
-		}
-		return dist;
-		
-	
-	}
-
 	/**
 	 * @return rate in inches / s
 	 */
@@ -121,15 +98,14 @@ public class LidarWrapper extends SendableBase implements PIDSource {
 					"You must call prepLidarForRateMeasurement() WELL BEFORE you attempt to record rate");
 		}
 
-		byte[] buffer;
-		buffer = new byte[1];
+		byte[] buffer = new byte[1];
 
 		buffer[0] = 0x00;
 
-		m_i2c.write(0x04, 0xa0);
-		m_i2c.write(0x00, 0x04);
+		this.m_i2c.write(0x04, 0xa0);
+		this.m_i2c.write(0x00, 0x04);
 
-		read(0x09, buffer, 1);
+		this.read(0x09, buffer, 1);
 
 		return 10 * Integer.toUnsignedLong(buffer[0]) / 2.54;
 
@@ -184,8 +160,7 @@ public class LidarWrapper extends SendableBase implements PIDSource {
 	@Override
 	public double pidGet() {
 		boolean isCorrected = getDistance() <= 33;
-		return pidSourceType == PIDSourceType.kDisplacement ? (isCorrected ? getDistanceCorrected() : getDistance())
-				: getRate();
+		return pidSourceType == PIDSourceType.kDisplacement ?  getDistance() : getRate();
 	}
 
 	@Override

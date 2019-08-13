@@ -1,4 +1,4 @@
-package util;
+package common.control;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 

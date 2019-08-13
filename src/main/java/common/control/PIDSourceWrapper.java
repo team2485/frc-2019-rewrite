@@ -1,4 +1,4 @@
-package util;
+package common.control;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;

@@ -1,17 +1,20 @@
-package util;
+package common.control;
 
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
-public class TalonSRXEncoderWrapper implements PIDSource{
+/**
+ * PIDSource Wrapper for an Encoder connected to a TalonSRX motor controller.
+ */
+public class TalonSRXEncoderPIDSource implements PIDSource{
 	private TalonSRX talonsrx;
 	private PIDSourceType pidSource;
 	private double distancePerRevolution = 1;
 	private double offset = 0;
 	
-	public TalonSRXEncoderWrapper(TalonSRX talonsrx, PIDSourceType pidSource) {
+	public TalonSRXEncoderPIDSource(TalonSRX talonsrx, PIDSourceType pidSource) {
 		this.talonsrx = talonsrx;
 		this.pidSource = pidSource;
 	}
@@ -28,7 +31,7 @@ public class TalonSRXEncoderWrapper implements PIDSource{
 	
 	@Override
 	public double pidGet() {
-		if(pidSource == PIDSourceType.kDisplacement) {
+		if (pidSource == PIDSourceType.kDisplacement) {
 			return ((double)(talonsrx.getSensorCollection().getQuadraturePosition() + offset)/4096)*distancePerRevolution;
 		} else {
 			return ((double)(talonsrx.getSelectedSensorVelocity(0))/4096)*10*distancePerRevolution;

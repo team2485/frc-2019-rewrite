@@ -1,12 +1,9 @@
-package util;
+package common.control;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 
-public class MotorSetter extends WarlordsControlSystem{
+public class MotorSetter extends WarlordsControlSystem {
 
-	
-	
-	
 	@Override
 	protected void calculate() {
 		for (PIDOutput out : super.outputs) {

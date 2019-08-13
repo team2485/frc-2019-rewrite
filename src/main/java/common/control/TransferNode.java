@@ -1,9 +1,12 @@
-package util;
+package common.control;
 
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
 import edu.wpi.first.wpilibj.PIDSourceType;
 
+/**
+ * Allows for asynchronous sharing of values between threads.
+ */
 public class TransferNode implements PIDSource,  PIDOutput {
 	
 	double output;

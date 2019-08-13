@@ -1,17 +1,17 @@
-package util;
+package common;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.buttons.JoystickButton;
 
 /**
  * Makes a button from a trigger or joystick.
+ * @author Nathan Sariowan
  */
 public class TriggerButton extends JoystickButton {
 
     private double threshold;
     private GenericHID joystick;
     private int port;
-    private boolean bidirectional;
 
     /**
      * 
@@ -25,30 +25,20 @@ public class TriggerButton extends JoystickButton {
         this.threshold = threshold;
         this.joystick = joystick;
         this.port = port;
-        this.bidirectional = false;
-    }
-
-    public TriggerButton(GenericHID joystick, int port, double threshold, boolean bidirectional) {
-        super(joystick, port);
-        this.threshold = threshold;
-        this.joystick = joystick; // "boisticc" -Aditya 2019 *best pit programmer to ever exist*
-        this.port = port;
-        this.bidirectional = bidirectional;
     }
 
     /**
      * Returns true if the joystick value is greater than the given threshold.
+     * If the threshold is negative, returns true if joystick value is less than the given threshold.
      */
     @Override
     public boolean get() {
-        double joystickVal = ThresholdHandler.deadbandAndScale(this.joystick.getRawAxis(this.port), 0.5, 0, 1);
+        double joystickVal = this.joystick.getRawAxis(this.port);
 
         if (threshold < 0) {
             return joystickVal <= threshold;
+        } else {
+            return joystickVal >= threshold;
         }
-        if (bidirectional) {
-            return joystickVal >= threshold || joystickVal <= -threshold;
-        }
-        return joystickVal >= threshold;
     }
 }

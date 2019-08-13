@@ -1,4 +1,4 @@
-package util;
+package common;
 
 /**
  * 
@@ -9,7 +9,7 @@ package util;
  * @author Aidan Fay
  * @author Jeremy McCulloch
  */
-public class ThresholdHandler { 
+public class ThresholdHandler {
 	
 	public static final double STANDARD_THRESHOLD = 0.1; 
 
