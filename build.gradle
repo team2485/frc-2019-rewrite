@@ -1,5 +1,6 @@
 plugins {
     id "java"
+    id 'idea'
     id "edu.wpi.first.GradleRIO" version "2019.4.1"
 }
 
@@ -40,6 +41,7 @@ def includeDesktopSupport = true
 // Maven central needed for JUnit
 repositories {
     mavenCentral()
+    mavenLocal()
     maven { url "https://jitpack.io" }
 }
 
@@ -47,9 +49,11 @@ repositories {
 // Also defines JUnit 4.
 dependencies {
     compile wpi.deps.wpilib()
+    wpi.deps.vendor.loadFrom(project(':WarlordsLib'))
     compile wpi.deps.vendor.java()
     nativeZip wpi.deps.vendor.jni(wpi.platforms.roborio)
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
+    compile project(':WarlordsLib')
     testCompile 'junit:junit:4.12'
     implementation 'com.github.Oblarg:command-rewrite-jitpack:1.4.0'
 }

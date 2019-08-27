@@ -23,3 +23,6 @@ pluginManagement {
         }
     }
 }
+
+rootProject.name='frc-2019-rewrite'
+include 'WarlordsLib'
