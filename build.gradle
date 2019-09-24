@@ -55,7 +55,7 @@ dependencies {
     nativeDesktopZip wpi.deps.vendor.jni(wpi.platforms.desktop)
     compile project(':WarlordsLib')
     testCompile 'junit:junit:4.12'
-    implementation 'com.github.Oblarg:command-rewrite-jitpack:1.4.0'
+    implementation 'com.github.Oblarg:command-rewrite-jitpack:1.5.1'
 }
 
 // Setting up my Jar File. In this case, adding all libraries into the main jar ('fat jar')

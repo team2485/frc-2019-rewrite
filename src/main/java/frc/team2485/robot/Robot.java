@@ -7,7 +7,10 @@
 
 package frc.team2485.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+
 /**
  * The VM is configured to automatically run this class, and to call the
  * functions corresponding to each mode, as described in the TimedRobot
@@ -16,36 +19,49 @@ import edu.wpi.first.wpilibj.TimedRobot;
  * project.
  */
 public class Robot extends TimedRobot {
-  /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
-  @Override
-  public void robotInit() {
-  }
+    RobotContainer robotContainer;
 
-  @Override
-  public void autonomousInit() {
-  }
 
-  @Override
-  public void autonomousPeriodic() {
-  }
+    Compressor compressor = new Compressor();
+    /**
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
+    @Override
+    public void robotInit() {
+        robotContainer = new RobotContainer();
+    }
 
-  @Override
-  public void teleopInit() {
-  }
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
 
-  @Override
-  public void teleopPeriodic() {
-  }
+    @Override
+    public void autonomousInit() {
+    }
 
-  @Override
-  public void testInit() {
-  }
+    @Override
+    public void autonomousPeriodic() {
+    }
 
-  @Override
-  public void testPeriodic() {
-  }
+    @Override
+    public void teleopInit() {
+
+        compressor.setClosedLoopControl(false);
+    }
+
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void testInit() {
+
+        compressor.setClosedLoopControl(true);
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
 
 }
