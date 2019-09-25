@@ -1,24 +1,33 @@
 package frc.team2485.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.wpi.first.wpilibj.PIDBase;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.control.CoupledPIDController;
+import frc.team2485.WarlordsLib.motorcontrol.CTRE_SpeedControllerGroup;
 import frc.team2485.WarlordsLib.motorcontrol.TalonSRXWrapper;
 
 public class Drivetrain extends SubsystemBase {
 
     private DifferentialDrive drive;
 
-    private SpeedControllerGroup leftSpeedControllers, rightSpeedControllers;
+    private CTRE_SpeedControllerGroup leftSpeedControllers, rightSpeedControllers;
 
     private TalonSRXWrapper driveLeftTalon1, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4;
 
     private TalonSRXWrapper driveRightTalon1, driveRightTalon2, driveRightTalon3, driveRightTalon4;
 
     private CoupledPIDController angleController;
+
+    private TalonSRX pigeonTalon;
+
+    private PigeonIMU pigeonIMU;
 
     public Drivetrain() {
         super();
@@ -33,12 +42,18 @@ public class Drivetrain extends SubsystemBase {
         this.driveRightTalon3 = new TalonSRXWrapper(6);
         this.driveRightTalon4 = new TalonSRXWrapper(7);
 
-        this.leftSpeedControllers = new SpeedControllerGroup(driveLeftTalon1, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
-        this.rightSpeedControllers = new SpeedControllerGroup(driveRightTalon1, driveRightTalon2, driveRightTalon3, driveRightTalon4);
+        this.leftSpeedControllers = new CTRE_SpeedControllerGroup(driveLeftTalon1, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
+        this.rightSpeedControllers = new CTRE_SpeedControllerGroup(driveRightTalon1, driveRightTalon2, driveRightTalon3, driveRightTalon4);
 
         this.drive = new DifferentialDrive(leftSpeedControllers, rightSpeedControllers);
 
+        this.pigeonTalon = new TalonSRX(1);
+
+        this.pigeonIMU = new PigeonIMU(pigeonTalon);
+
         this.angleController = new CoupledPIDController(0,0,0);
+
+        angleController.setPercentTolerance(0.05);
 
         addChild("Drive", drive);
         addChild("Velocity Controller", angleController);
@@ -54,6 +69,25 @@ public class Drivetrain extends SubsystemBase {
 
     public void setRight(double pwm) {
         rightSpeedControllers.set(pwm);
+    }
+
+    public void setAngleSetpoint(double setpoint) {
+
+        angleController.setSetpoint(setpoint);
+
+        angleController.setOutputRange(-10, 10);
+    }
+
+    public void calculateAngle() {
+        double output = angleController.calculate(Math.PI / 180 * -1 * pigeonIMU.getFusedHeading() );
+
+        leftSpeedControllers.set(ControlMode.Current, output);
+        rightSpeedControllers.set(ControlMode.Current, -output);
+
+    }
+
+    public boolean angleOnTarget() {
+        return angleController.atSetpoint(0.05, CoupledPIDController.Tolerance.kPercent);
     }
 
 
