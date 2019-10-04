@@ -14,8 +14,8 @@ public class HatchIntake extends SubsystemBase {
     public HatchIntake() {
         super();
 
-        liftSolenoid = new DoubleSolenoid(0, 4);
-        slideSolenoid = new DoubleSolenoid(1, 5);
+        liftSolenoid = new DoubleSolenoid(4, 0);
+        slideSolenoid = new DoubleSolenoid(5, 1);
 
         rollersMotor = new TalonSRXWrapper(10);
 
@@ -46,7 +46,7 @@ public class HatchIntake extends SubsystemBase {
         rollersMotor.set(pwm);
     }
 
-    public void stopRollers(double pwm) {
+    public void stopRollers() {
         rollersMotor.set(0);
     }
 

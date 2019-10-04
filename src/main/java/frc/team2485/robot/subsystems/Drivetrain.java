@@ -8,6 +8,7 @@ import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.control.CoupledPIDController;
 import frc.team2485.WarlordsLib.motorcontrol.CTRE_SpeedControllerGroup;
@@ -37,10 +38,20 @@ public class Drivetrain extends SubsystemBase {
         this.driveLeftTalon3 = new TalonSRXWrapper(14);
         this.driveLeftTalon4 = new TalonSRXWrapper(15);
 
+        this.driveLeftTalon1.setInverted(true);
+        this.driveLeftTalon2.setInverted(true);
+        this.driveLeftTalon3.setInverted(true);
+        this.driveLeftTalon4.setInverted(true);
+
         this.driveRightTalon1 = new TalonSRXWrapper(4);
         this.driveRightTalon2 = new TalonSRXWrapper(5);
         this.driveRightTalon3 = new TalonSRXWrapper(6);
         this.driveRightTalon4 = new TalonSRXWrapper(7);
+
+        this.driveRightTalon1.setInverted(true);
+        this.driveRightTalon2.setInverted(true);
+        this.driveRightTalon3.setInverted(true);
+        this.driveRightTalon4.setInverted(true);
 
         this.leftSpeedControllers = new CTRE_SpeedControllerGroup(driveLeftTalon1, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
         this.rightSpeedControllers = new CTRE_SpeedControllerGroup(driveRightTalon1, driveRightTalon2, driveRightTalon3, driveRightTalon4);
@@ -86,8 +97,17 @@ public class Drivetrain extends SubsystemBase {
 
     }
 
+    public double getAngle() {
+        return pigeonIMU.getFusedHeading();
+    }
+
     public boolean angleOnTarget() {
         return angleController.atSetpoint(0.05, CoupledPIDController.Tolerance.kPercent);
+    }
+
+    public void reset() {
+        pigeonIMU.setFusedHeading(0, 50);
+        pigeonIMU.setYaw(0, 50);
     }
 
 

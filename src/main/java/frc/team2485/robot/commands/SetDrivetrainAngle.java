@@ -12,8 +12,11 @@ public class SetDrivetrainAngle extends CommandBase {
     public SetDrivetrainAngle(Drivetrain drivetrain, double setpoint) {
         addRequirements(drivetrain);
 
+        this.drivetrain = drivetrain;
+
         this.setpoint = setpoint;
 
+        drivetrain.reset();
         drivetrain.setAngleSetpoint(setpoint);
     }
 

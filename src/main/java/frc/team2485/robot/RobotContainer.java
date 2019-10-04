@@ -12,6 +12,7 @@ import frc.team2485.WarlordsLib.motorcontrol.TalonSRXWrapper;
 import frc.team2485.robot.commands.SetDrivetrainAngle;
 import frc.team2485.robot.subsystems.Drivetrain;
 import frc.team2485.robot.subsystems.HatchIntake;
+import frc.team2485.robot.subsystems.HatchIntakeRollers;
 
 import javax.management.DescriptorRead;
 
@@ -21,11 +22,13 @@ public class RobotContainer {
 
     private Drivetrain drivetrain;
     private HatchIntake hatchIntake;
+    private HatchIntakeRollers hatchIntakeRollers;
 
     public RobotContainer() {
 
         drivetrain = new Drivetrain();
         hatchIntake = new HatchIntake();
+        hatchIntakeRollers = new HatchIntakeRollers();
 
         jack = new XboxController(0);
 
@@ -37,21 +40,31 @@ public class RobotContainer {
 
     public void configureCommands() {
 
-        drivetrain.setDefaultCommand(new RunCommand(() -> {
-            drivetrain.curvatureDrive(jack.getTriggerAxis(GenericHID.Hand.kRight) - jack.getTriggerAxis(GenericHID.Hand.kLeft), jack.getX(GenericHID.Hand.kLeft), jack.getXButton());
-        }));
+        drivetrain.setDefaultCommand(new RunCommand(() ->
+            drivetrain.curvatureDrive(jack.getTriggerAxis(GenericHID.Hand.kRight) - jack.getTriggerAxis(GenericHID.Hand.kLeft), jack.getX(GenericHID.Hand.kLeft), jack.getXButton())
+                , drivetrain));
 
-//        XboxController.Button.kY.value;
-//
         new JoystickButton(jack, Constants.Button.kBumperLeft.value)
-                .whenPressed(new InstantCommand(hatchIntake::lift)
-                        .andThen(new InstantCommand(hatchIntake::slideOut)));
+                .whenPressed(new SequentialCommandGroup(
+                        new InstantCommand(hatchIntake::lift),
+                        new WaitCommand(0.2),
+                        new InstantCommand(hatchIntake::slideOut)));
 
-        new Trigger(() -> {
-            return jack.getTriggerAxis(GenericHID.Hand.kRight) > 0.2;
-        }).whenActive(new InstantCommand(() -> {
-            hatchIntake.setRollers(0.5);
-        }));
+
+        new JoystickButton(jack, Constants.Button.kBumperRight.value)
+                .whenPressed(new InstantCommand(hatchIntake::slideIn)
+                    .andThen(new InstantCommand(hatchIntake::stow)));
+
+        new JoystickButton(jack, Constants.Button.kA.value)
+                .whenPressed(new InstantCommand(()->hatchIntakeRollers.setRollers(0.8)))
+                .whenReleased(new InstantCommand(hatchIntakeRollers::stopRollers));
+
+
+//        new Trigger(() -> {
+//            return jack.getTriggerAxis(GenericHID.Hand.kRight) > 0.2;
+//        }).whenActive(new InstantCommand(() -> {
+//            hatchIntake.setRollers(0.5);
+//        }));
     }
 
     public Command getAutonomousCommand() {
