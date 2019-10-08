@@ -68,7 +68,7 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new SetDrivetrainAngle(drivetrain, Math.PI);
+        return new SetDrivetrainAngle(drivetrain, Math.PI/2);
     }
 
 

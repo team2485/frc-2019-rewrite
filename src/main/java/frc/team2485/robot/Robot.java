@@ -43,11 +43,15 @@ public class Robot extends TimedRobot {
     @Override
     public void autonomousInit() {
 
+        compressor.setClosedLoopControl(false);
+
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
+
     }
 
     @Override
