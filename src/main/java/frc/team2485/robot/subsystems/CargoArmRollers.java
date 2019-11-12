@@ -1,19 +1,20 @@
 package frc.team2485.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.motorcontrol.TalonSRXWrapper;
 import frc.team2485.robot.Constants;
 
-public class HatchIntakeRollers extends SubsystemBase {
+public class CargoArmRollers extends SubsystemBase {
+
     private TalonSRXWrapper rollersMotor;
 
-    public HatchIntakeRollers(){
+    public CargoArmRollers() {
         super();
-        rollersMotor = new TalonSRXWrapper(Constants.HATCH_INTAKE_ROLLERS_MOTOR_PORT);
+        rollersMotor = new TalonSRXWrapper(Constants.CARGO_ARM_ROLLERS_MOTOR_PORT);
 
-        addChild("Hatch Intake Rollers", rollersMotor);
+        addChild("Cargo Arm Rollers", rollersMotor);
     }
+
     public void set(double pwm) {
         rollersMotor.set(pwm);
     }
@@ -22,7 +23,4 @@ public class HatchIntakeRollers extends SubsystemBase {
         rollersMotor.set(0);
     }
 
-    public void setCurrent(double current) {
-        rollersMotor.set(ControlMode.Current, current);
-    }
 }
