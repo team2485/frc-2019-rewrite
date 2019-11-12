@@ -7,11 +7,8 @@
 
 package frc.team2485.robot;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
@@ -27,6 +24,7 @@ public class Robot extends TimedRobot {
     public RobotContainer robotContainer;
 
     public Command autonomousCommand;
+
 
     Compressor compressor = new Compressor();
     /**
@@ -72,29 +70,17 @@ public class Robot extends TimedRobot {
 
     @Override
     public void teleopPeriodic() {
-
     }
 
     @Override
     public void testInit() {
 
         CommandScheduler.getInstance().cancelAll();
-
-        SmartDashboard.putBoolean("Compressor", false);
+        compressor.setClosedLoopControl(true);
     }
 
     @Override
     public void testPeriodic() {
-
-
-        compressor.setClosedLoopControl(true);
-
-//        if (SmartDashboard.getBoolean("Compressor", false)) {
-//            compressor.setClosedLoopControl(true);
-//        } else {
-//
-//            compressor.setClosedLoopControl(false);
-//        }
     }
 
 }

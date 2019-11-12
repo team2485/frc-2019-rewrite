@@ -5,7 +5,7 @@ public class Constants {
     /**
      * WPILib Button enum is public in next release; private currently
      */
-    public enum XboxButton {
+    public enum Button {
         kBumperLeft(5),
         kBumperRight(6),
         kStickLeft(9),
@@ -20,19 +20,16 @@ public class Constants {
         @SuppressWarnings({"MemberName", "PMD.SingularField"})
         public final int value;
 
-        XboxButton(int value) {
+        Button(int value) {
             this.value = value;
         }
     }
 
-    public static final double XBOX_THRESHOLD = 0.2;
 
+    public static final double LIFT_SOLENOID_IN_PORT = 0;
+    public static final double LIFT_SOLENOID_OUT_PORT = 4;
+    public static final double SLIDE_SOLENOID_IN_PORT = 1;
+    public static final double SLIDE_SOLENOID_OUT_PORT = 5;
 
-    public static final int LIFT_SOLENOID_FORWARD_PORT = 4;
-    public static final int LIFT_SOLENOID_REVERSE_PORT = 0;
-    public static final int SLIDE_SOLENOID_FORWARD_PORT = 5;
-    public static final int SLIDE_SOLENOID_REVERSE_PORT = 1;
-
-    public static final int CARGO_ARM_ROLLERS_MOTOR_PORT = 8;
-    public static final int HATCH_INTAKE_ROLLERS_MOTOR_PORT = 10;
+    public static final double HATCH_INTAKE_ROLLERS_MOTOR_PORT = 10;
 }
