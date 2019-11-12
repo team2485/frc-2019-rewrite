@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.SpeedController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.control.CoupledPIDController;
@@ -68,14 +69,19 @@ public class Drivetrain extends SubsystemBase {
         angleController.setPercentTolerance(0.05);
 
         addChild("Drive", drive);
-        addChild("Velocity Controller", angleController);
+        addChild("Angle Controller", angleController);
         addChild("Left Speed Controllers", leftSpeedControllers);
         addChild("Right Speed Controllers", rightSpeedControllers);
 
     }
 
+
     public void curvatureDrive(double throttle, double steering, boolean isQuickTurn) {
         drive.curvatureDrive(throttle, steering, isQuickTurn);
+    }
+
+    public CoupledPIDController getAngleController() {
+        return this.angleController;
     }
 
     public void setLeft(double pwm) {
@@ -90,13 +96,13 @@ public class Drivetrain extends SubsystemBase {
 
         angleController.setSetpoint(setpoint);
 
-        angleController.setOutputRange(-10, 10);
+        angleController.setOutputRange(-1, 1);
     }
 
     public void calculateAngle() {
         double output = angleController.calculate(Math.PI / 180 * -1 * pigeonIMU.getFusedHeading() );
 
-        SmartDashboard.putNumber("Angle", pigeonIMU.getFusedHeading());
+        SmartDashboard.putNumber("Angle", Math.PI / 180 * -1 * pigeonIMU.getFusedHeading() );
         SmartDashboard.putNumber("Angle Controller Output", output);
 
 
