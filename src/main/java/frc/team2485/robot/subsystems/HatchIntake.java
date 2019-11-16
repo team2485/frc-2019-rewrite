@@ -2,14 +2,11 @@ package frc.team2485.robot.subsystems;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2485.WarlordsLib.motorcontrol.TalonSRXWrapper;
 
 public class HatchIntake extends SubsystemBase {
 
     private DoubleSolenoid liftSolenoid;
     private DoubleSolenoid slideSolenoid;
-
-    private TalonSRXWrapper rollersMotor;
 
     public HatchIntake() {
         super();
@@ -17,12 +14,10 @@ public class HatchIntake extends SubsystemBase {
         liftSolenoid = new DoubleSolenoid(4, 0);
         slideSolenoid = new DoubleSolenoid(5, 1);
 
-        rollersMotor = new TalonSRXWrapper(10);
 
         addChild("Lift Solenoid", liftSolenoid);
         addChild("Slide Solenoid", slideSolenoid);
 
-        addChild("Hatch Intake Rollers", rollersMotor);
     };
 
     public void lift() {
@@ -42,12 +37,5 @@ public class HatchIntake extends SubsystemBase {
         slideSolenoid.set(DoubleSolenoid.Value.kReverse);
     }
 
-    public void setRollers(double pwm) {
-        rollersMotor.set(pwm);
-    }
-
-    public void stopRollers() {
-        rollersMotor.set(0);
-    }
 
 }

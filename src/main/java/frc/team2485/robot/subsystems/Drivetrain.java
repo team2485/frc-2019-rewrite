@@ -2,27 +2,19 @@ package frc.team2485.robot.subsystems;
 
 import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
+import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
-import edu.wpi.first.wpilibj.PIDBase;
-import edu.wpi.first.wpilibj.PIDController;
-import edu.wpi.first.wpilibj.SpeedController;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.control.CoupledPIDController;
-import frc.team2485.WarlordsLib.motorcontrol.CTRE_SpeedControllerGroup;
-import frc.team2485.WarlordsLib.motorcontrol.TalonSRXWrapper;
 
 public class Drivetrain extends SubsystemBase {
 
     private DifferentialDrive drive;
 
-    private CTRE_SpeedControllerGroup leftSpeedControllers, rightSpeedControllers;
+    private WPI_TalonSRX driveLeftTalonMaster, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4;
 
-    private TalonSRXWrapper driveLeftTalon1, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4;
-
-    private TalonSRXWrapper driveRightTalon1, driveRightTalon2, driveRightTalon3, driveRightTalon4;
+    private WPI_TalonSRX driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4;
 
     private CoupledPIDController angleController;
 
@@ -33,30 +25,35 @@ public class Drivetrain extends SubsystemBase {
     public Drivetrain() {
         super();
 
-        this.driveLeftTalon1 = new TalonSRXWrapper(12);
-        this.driveLeftTalon2 = new TalonSRXWrapper(13);
-        this.driveLeftTalon3 = new TalonSRXWrapper(14);
-        this.driveLeftTalon4 = new TalonSRXWrapper(15);
+        this.driveLeftTalonMaster = new WPI_TalonSRX(12);
+        this.driveLeftTalon2 = new WPI_TalonSRX(13);
+        this.driveLeftTalon3 = new WPI_TalonSRX(14);
+        this.driveLeftTalon4 = new WPI_TalonSRX(15);
 
-        this.driveLeftTalon1.setInverted(true);
+        this.driveLeftTalonMaster.setInverted(true);
         this.driveLeftTalon2.setInverted(true);
         this.driveLeftTalon3.setInverted(true);
         this.driveLeftTalon4.setInverted(true);
 
-        this.driveRightTalon1 = new TalonSRXWrapper(4);
-        this.driveRightTalon2 = new TalonSRXWrapper(5);
-        this.driveRightTalon3 = new TalonSRXWrapper(6);
-        this.driveRightTalon4 = new TalonSRXWrapper(7);
+        this.driveLeftTalon2.follow(driveLeftTalonMaster);
+        this.driveLeftTalon3.follow(driveLeftTalonMaster);
+        this.driveLeftTalon4.follow(driveLeftTalonMaster);
 
-        this.driveRightTalon1.setInverted(true);
+        this.driveRightTalonMaster = new WPI_TalonSRX(4);
+        this.driveRightTalon2 = new WPI_TalonSRX(5);
+        this.driveRightTalon3 = new WPI_TalonSRX(6);
+        this.driveRightTalon4 = new WPI_TalonSRX(7);
+
+        this.driveRightTalonMaster.setInverted(true);
         this.driveRightTalon2.setInverted(true);
         this.driveRightTalon3.setInverted(true);
         this.driveRightTalon4.setInverted(true);
 
-        this.leftSpeedControllers = new CTRE_SpeedControllerGroup(driveLeftTalon1, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
-        this.rightSpeedControllers = new CTRE_SpeedControllerGroup(driveRightTalon1, driveRightTalon2, driveRightTalon3, driveRightTalon4);
+        this.driveRightTalon2.follow(driveRightTalonMaster);
+        this.driveRightTalon3.follow(driveRightTalonMaster);
+        this.driveRightTalon4.follow(driveRightTalonMaster);
 
-        this.drive = new DifferentialDrive(leftSpeedControllers, rightSpeedControllers);
+        this.drive = new DifferentialDrive(driveLeftTalonMaster, driveRightTalonMaster);
 
         this.pigeonTalon = new TalonSRX(1);
 
@@ -75,11 +72,11 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setLeft(double pwm) {
-        leftSpeedControllers.set(pwm);
+        driveLeftTalonMaster.set(pwm);
     }
 
     public void setRight(double pwm) {
-        rightSpeedControllers.set(pwm);
+        driveRi.set(pwm);
     }
 
     public void setAngleSetpoint(double setpoint) {

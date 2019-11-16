@@ -1,20 +1,14 @@
 package frc.team2485.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
-import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
-import edu.wpi.first.wpilibj2.command.button.Button;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.team2485.WarlordsLib.motorcontrol.TalonSRXWrapper;
 import frc.team2485.robot.commands.SetDrivetrainAngle;
 import frc.team2485.robot.subsystems.Drivetrain;
 import frc.team2485.robot.subsystems.HatchIntake;
 import frc.team2485.robot.subsystems.HatchIntakeRollers;
-
-import javax.management.DescriptorRead;
 
 public class RobotContainer {
 
