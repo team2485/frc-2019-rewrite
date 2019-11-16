@@ -5,6 +5,8 @@ import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.control.CoupledPIDController;
 
@@ -59,12 +61,15 @@ public class Drivetrain extends SubsystemBase {
 
         this.pigeonIMU = new PigeonIMU(pigeonTalon);
 
-        this.angleController = new CoupledPIDController(0,0,0);
+        this.angleController = new CoupledPIDController(0.5,0,0);
 
         angleController.setPercentTolerance(0.05);
 
         addChild("Drive", drive);
         addChild("Velocity Controller", angleController);
+        addChild("Left Speed Controllers", driveLeftTalonMaster);
+        addChild("Right Speed Controllers", driveRightTalonMaster);
+
     }
 
     public void curvatureDrive(double throttle, double steering, boolean isQuickTurn) {
@@ -76,7 +81,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public void setRight(double pwm) {
-        driveRi.set(pwm);
+        driveRightTalonMaster.set(pwm);
     }
 
     public void setAngleSetpoint(double setpoint) {
@@ -89,8 +94,12 @@ public class Drivetrain extends SubsystemBase {
     public void calculateAngle() {
         double output = angleController.calculate(Math.PI / 180 * -1 * pigeonIMU.getFusedHeading() );
 
-        leftSpeedControllers.set(ControlMode.Current, output);
-        rightSpeedControllers.set(ControlMode.Current, -output);
+        SmartDashboard.putNumber("Angle", pigeonIMU.getFusedHeading());
+        SmartDashboard.putNumber("Angle Controller Output", output);
+
+
+        driveLeftTalonMaster.set(ControlMode.Current, output);
+        driveRightTalonMaster.set(ControlMode.Current, -output);
 
     }
 
@@ -105,6 +114,10 @@ public class Drivetrain extends SubsystemBase {
     public void reset() {
         pigeonIMU.setFusedHeading(0, 50);
         pigeonIMU.setYaw(0, 50);
+    }
+
+    public void setMaxOutput(double maxOutput) {
+        drive.setMaxOutput(maxOutput);
     }
 
 
