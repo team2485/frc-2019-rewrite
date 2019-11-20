@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2485.WarlordsLib.RobotConfig;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -24,7 +25,6 @@ public class Robot extends TimedRobot {
     public RobotContainer robotContainer;
 
     public Command autonomousCommand;
-
 
     Compressor compressor = new Compressor();
     /**
