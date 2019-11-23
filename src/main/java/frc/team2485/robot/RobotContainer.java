@@ -13,8 +13,6 @@ import frc.team2485.robot.subsystems.HatchIntakeRollers;
 
 public class RobotContainer {
 
-    public RobotConfigurator robotConfigurator;
-
     private XboxController jack;
 
     private Drivetrain drivetrain;

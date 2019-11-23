@@ -4,12 +4,12 @@ import com.ctre.phoenix.motorcontrol.ControlMode;
 import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
+import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2485.WarlordsLib.control.ConfigurableWarlordsPIDController;
 import frc.team2485.WarlordsLib.control.WarlordsPIDController;
-import frc.team2485.WarlordsLib.robotConfigs.RobotConfigurator;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -62,15 +62,17 @@ public class Drivetrain extends SubsystemBase {
 
         this.pigeonIMU = new PigeonIMU(pigeonTalon);
 
-        this.angleController = new ConfigurableWarlordsPIDController(0,0,0,"drivetrain");
+        this.angleController = new WarlordsPIDController("Angle Controller", true);
 
         angleController.setPercentTolerance(0.05);
 
         addChild("Drive", drive);
-        addChild("Velocity Controller", angleController);
+        addChild("Angle Controller", angleController);
         addChild("Left Speed Controllers", driveLeftTalonMaster);
         addChild("Right Speed Controllers", driveRightTalonMaster);
 
+
+//        Shuffleboard.getTab("Drivetrain").add(angleController);
     }
 
     public void curvatureDrive(double throttle, double steering, boolean isQuickTurn) {
@@ -97,7 +99,6 @@ public class Drivetrain extends SubsystemBase {
 
         SmartDashboard.putNumber("Angle", pigeonIMU.getFusedHeading());
         SmartDashboard.putNumber("Angle Controller Output", output);
-
 
         driveLeftTalonMaster.set(ControlMode.Current, output);
         driveRightTalonMaster.set(ControlMode.Current, -output);
