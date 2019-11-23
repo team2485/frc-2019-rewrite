@@ -5,7 +5,7 @@ import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-import frc.team2485.WarlordsLib.RobotConfig;
+import frc.team2485.WarlordsLib.robotConfigs.RobotConfigurator;
 import frc.team2485.robot.commands.SetDrivetrainAngle;
 import frc.team2485.robot.subsystems.Drivetrain;
 import frc.team2485.robot.subsystems.HatchIntake;
@@ -13,9 +13,9 @@ import frc.team2485.robot.subsystems.HatchIntakeRollers;
 
 public class RobotContainer {
 
-    private XboxController jack;
+    public RobotConfigurator robotConfigurator;
 
-    public RobotConfig robotConfig;
+    private XboxController jack;
 
     private Drivetrain drivetrain;
     private HatchIntake hatchIntake;

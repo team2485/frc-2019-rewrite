@@ -9,9 +9,10 @@ package frc.team2485.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2485.WarlordsLib.RobotConfig;
+import frc.team2485.WarlordsLib.robotConfigs.RobotConfigurator;
 
 /**
  * The VM is configured to automatically run this class, and to call the
@@ -27,17 +28,26 @@ public class Robot extends TimedRobot {
     public Command autonomousCommand;
 
     Compressor compressor = new Compressor();
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
     @Override
     public void robotInit() {
+        RobotConfigurator.getInstance().loadConfigsFromFile("/home/lvuser/constants.csv");
+
         robotContainer = new RobotContainer();
     }
 
+    @Override
     public void robotPeriodic() {
         CommandScheduler.getInstance().run();
+    }
+
+    @Override
+    public void disabledInit() {
+        RobotConfigurator.getInstance().saveConfigsToFile("/home/lvuser/constants.csv");
     }
 
     @Override
