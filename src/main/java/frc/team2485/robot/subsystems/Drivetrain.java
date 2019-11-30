@@ -9,6 +9,7 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.team2485.WarlordsLib.CTRE_SpeedControllerGroup;
 import frc.team2485.WarlordsLib.control.WarlordsPIDController;
 
 public class Drivetrain extends SubsystemBase {
@@ -18,6 +19,8 @@ public class Drivetrain extends SubsystemBase {
     private WPI_TalonSRX driveLeftTalonMaster, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4;
 
     private WPI_TalonSRX driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4;
+
+    private CTRE_SpeedControllerGroup driveLeft, driveRight;
 
     private WarlordsPIDController angleController;
 
@@ -33,30 +36,45 @@ public class Drivetrain extends SubsystemBase {
         this.driveLeftTalon3 = new WPI_TalonSRX(14);
         this.driveLeftTalon4 = new WPI_TalonSRX(15);
 
-        this.driveLeftTalonMaster.setInverted(true);
-        this.driveLeftTalon2.setInverted(true);
+//        this.driveLeftTalonMaster.setInverted(true);
+//        this.driveLeftTalon2.setInverted(true);
         this.driveLeftTalon3.setInverted(true);
-        this.driveLeftTalon4.setInverted(true);
+//        this.driveLeftTalon4.setInverted(true);
 
-        this.driveLeftTalon2.follow(driveLeftTalonMaster);
-        this.driveLeftTalon3.follow(driveLeftTalonMaster);
-        this.driveLeftTalon4.follow(driveLeftTalonMaster);
+
+//        this.driveLeftTalon2.set(ControlMode.Follower,12);
+//        this.driveLeftTalon3.set(ControlMode.Follower,12);
+//        this.driveLeftTalon4.set(ControlMode.Follower,12);
+//
+//        this.driveLeftTalon2.follow(driveLeftTalonMaster);
+//        this.driveLeftTalon3.follow(driveLeftTalonMaster);
+//        this.driveLeftTalon4.follow(driveLeftTalonMaster);
 
         this.driveRightTalonMaster = new WPI_TalonSRX(4);
         this.driveRightTalon2 = new WPI_TalonSRX(5);
         this.driveRightTalon3 = new WPI_TalonSRX(6);
         this.driveRightTalon4 = new WPI_TalonSRX(7);
 
-        this.driveRightTalonMaster.setInverted(true);
-        this.driveRightTalon2.setInverted(true);
-        this.driveRightTalon3.setInverted(true);
-        this.driveRightTalon4.setInverted(true);
+//        this.driveRightTalonMaster.setInverted(true);
+//        this.driveRightTalon2.setInverted(true);
+//        this.driveRightTalon3.setInverted(true);
+//        this.driveRightTalon4.setInverted(true);
 
-        this.driveRightTalon2.follow(driveRightTalonMaster);
-        this.driveRightTalon3.follow(driveRightTalonMaster);
-        this.driveRightTalon4.follow(driveRightTalonMaster);
+//        this.driveRightTalon2.set(ControlMode.Follower,4);
+//        this.driveRightTalon3.set(ControlMode.Follower,4);
+//        this.driveRightTalon4.set(ControlMode.Follower,4);
+//
+//        this.driveRightTalon2.follow(driveRightTalonMaster);
+//        this.driveRightTalon3.follow(driveRightTalonMaster);
+//        this.driveRightTalon4.follow(driveRightTalonMaster);
 
-        this.drive = new DifferentialDrive(driveLeftTalonMaster, driveRightTalonMaster);
+        this.driveLeft = new CTRE_SpeedControllerGroup(driveLeftTalonMaster, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
+        driveLeft.setInverted(true);
+
+        this.driveRight = new CTRE_SpeedControllerGroup(driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4);
+        driveRight.setInverted(true);
+
+        this.drive = new DifferentialDrive(driveLeft, driveRight);
 
         this.pigeonTalon = new TalonSRX(1);
 
@@ -66,13 +84,22 @@ public class Drivetrain extends SubsystemBase {
 
         angleController.setPercentTolerance(0.05);
 
-        addChild("Drive", drive);
+//        addChild("Drive", drive);
         addChild("Angle Controller", angleController);
-        addChild("Left Speed Controllers", driveLeftTalonMaster);
-        addChild("Right Speed Controllers", driveRightTalonMaster);
+        addChild("Left Speed Controllers", driveLeft);
+        addChild("Right Speed Controllers", driveRight);
+
+        addChild("Right Talon 1", driveRightTalonMaster);
+        addChild("Right Talon 2", driveRightTalon2);
+        addChild("Right Talon 3", driveRightTalon3);
+        addChild("Right Talon 4", driveRightTalon4);
 
 
-//        Shuffleboard.getTab("Drivetrain").add(angleController);
+        addChild("Left Talon 1", driveLeftTalonMaster);
+        addChild("Left Talon 2", driveLeftTalon2);
+        addChild("Left Talon 3", driveLeftTalon3);
+        addChild("Left Talon 4", driveLeftTalon4);
+
     }
 
     public void curvatureDrive(double throttle, double steering, boolean isQuickTurn) {
@@ -100,9 +127,15 @@ public class Drivetrain extends SubsystemBase {
         SmartDashboard.putNumber("Angle", pigeonIMU.getFusedHeading());
         SmartDashboard.putNumber("Angle Controller Output", output);
 
-        driveLeftTalonMaster.set(ControlMode.Current, output);
-        driveRightTalonMaster.set(ControlMode.Current, -output);
 
+
+
+        driveLeft.set(ControlMode.Current, output);
+        driveRight.set(ControlMode.Current, -output);
+
+
+        SmartDashboard.putNumber("left", driveLeft.get());
+        SmartDashboard.putNumber("right", driveRight.get());
     }
 
     public double getAngle() {
@@ -116,6 +149,7 @@ public class Drivetrain extends SubsystemBase {
     public void reset() {
         pigeonIMU.setFusedHeading(0, 50);
         pigeonIMU.setYaw(0, 50);
+        angleController.reset();
     }
 
     public void setMaxOutput(double maxOutput) {

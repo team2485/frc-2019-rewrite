@@ -2,6 +2,7 @@ package frc.team2485.robot;
 
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.*;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -54,6 +55,7 @@ public class RobotContainer {
                 .whenPressed(new InstantCommand(()->hatchIntakeRollers.setRollers(0.8)))
                 .whenReleased(new InstantCommand(hatchIntakeRollers::stopRollers));
 
+        Shuffleboard.getTab("Drivetrain").add("SetDrivetrainAngle", new SetDrivetrainAngle(drivetrain, Math.PI/2));
 
 //        new Trigger(() -> {
 //            return jack.getTriggerAxis(GenericHID.Hand.kRight) > 0.2;
