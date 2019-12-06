@@ -25,11 +25,18 @@ public class Constants {
         }
     }
 
+    public class HatchIntakeConstants {
+        public static final int LIFT_SOLENOID_IN_PORT = 0;
+        public static final int LIFT_SOLENOID_OUT_PORT = 4;
+        public static final int SLIDE_SOLENOID_IN_PORT = 1;
+        public static final int SLIDE_SOLENOID_OUT_PORT = 5;
+    }
 
-    public static final double LIFT_SOLENOID_IN_PORT = 0;
-    public static final double LIFT_SOLENOID_OUT_PORT = 4;
-    public static final double SLIDE_SOLENOID_IN_PORT = 1;
-    public static final double SLIDE_SOLENOID_OUT_PORT = 5;
+    public class HatchIntakeRollersConstants {
+        public static final int HATCH_INTAKE_ROLLERS_MOTOR_PORT = 10;
+    }
 
-    public static final double HATCH_INTAKE_ROLLERS_MOTOR_PORT = 10;
+    public class CargoRollersConstants{
+        public static final int CARGO_ROLLERS_MOTOR_PORT = 8;
+    }
 }
