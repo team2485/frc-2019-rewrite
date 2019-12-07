@@ -19,6 +19,8 @@ public class CargoRollers extends SubsystemBase {
         cargoRollersTalon.set(ControlMode.PercentOutput, power);
     }
 
+
+
     public void setIntaken(boolean intaken) {
         this.intaken = intaken;
     }
@@ -26,4 +28,6 @@ public class CargoRollers extends SubsystemBase {
     public boolean getIntaken() {
         return this.intaken;
     }
+
+
 }
