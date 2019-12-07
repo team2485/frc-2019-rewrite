@@ -13,7 +13,8 @@ import frc.team2485.robot.subsystems.CargoRollers;
 import frc.team2485.robot.subsystems.Drivetrain;
 import frc.team2485.robot.subsystems.HatchIntake;
 import frc.team2485.robot.subsystems.HatchIntakeRollers;
-import static frc.team2485.robot.Constants.CargoRollersConstants.CARGO_ROLLERS_OUTTAKE_PWM;
+
+import static frc.team2485.robot.Constants.CargoRollersConstants.*;
 
 public class RobotContainer {
 
@@ -82,13 +83,18 @@ public class RobotContainer {
         Suraj left bumper: press to intake
         Suraj left trigger: press to outtake, release to stop
          */
-
+        //Cargo intake
         new JoystickButton(suraj, Constants.Button.kBumperLeft.value)
                 .whenPressed(new InstantCommand(hatchIntake::slideIn)
                     .andThen(new InstantCommand(hatchIntake::stow)
                         .andThen(/*Cargoarmwithcontrollers*/ new InstantCommand(null)
-                                .alongWith(/*CArgorollers*/new InstantCommand(null)))));
+                                .alongWith(new InstantCommand(() -> cargoRollers.setRollersManual(CARGO_ROLLERS_INTAKE_PWM))
+                                .andThen(new WaitUntilCommand(cargoRollers::isSpiking)
+                                        .andThen(new WaitCommand(CARGO_INTAKE_SPIKE_TIME))
+                                        .andThen(new InstantCommand(()->cargoRollers.setRollersManual(CARGO_ROLLERS_HOLDING_PWM))
+                                ))))));
 
+        //cargo outake
         new Trigger(() -> {
             return suraj.getTriggerAxis(GenericHID.Hand.kLeft) > 0.2;
         }).whenActive(new InstantCommand(() -> {

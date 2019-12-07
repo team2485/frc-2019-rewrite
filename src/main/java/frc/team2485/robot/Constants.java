@@ -39,6 +39,10 @@ public class Constants {
     public class CargoRollersConstants{
         public static final int CARGO_ROLLERS_MOTOR_PORT = 8;
         public static final double CARGO_ROLLERS_HOLDING_CURRENT = 1;
+        public static final double CARGO_ROLLERS_INTAKE_PWM = 0.4;
         public static final double CARGO_ROLLERS_OUTTAKE_PWM = 0.4;
+        public static final double CARGO_INTAKE_SPIKE_MIN_CURRENT = 12;
+        public static final int CARGO_INTAKE_SPIKE_TIME = 500;
+        public static final double CARGO_ROLLERS_HOLDING_PWM = 0.2;
     }
 }
