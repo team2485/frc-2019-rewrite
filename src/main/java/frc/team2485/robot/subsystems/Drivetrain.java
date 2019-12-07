@@ -1,71 +1,48 @@
 package frc.team2485.robot.subsystems;
 
-import com.ctre.phoenix.motorcontrol.ControlMode;
-import com.ctre.phoenix.motorcontrol.can.TalonSRX;
 import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2485.WarlordsLib.motorcontrol.CTRE_SpeedControllerGroup;
 import frc.team2485.WarlordsLib.control.WarlordsPIDController;
+import frc.team2485.WarlordsLib.motorcontrol.WL_TalonSRX;
 
 public class Drivetrain extends SubsystemBase {
 
     private DifferentialDrive drive;
 
-    private TalonSRX driveLeftTalonMaster, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4;
+    private WL_TalonSRX driveLeftTalonMaster, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4;
 
-    private TalonSRX driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4;
-
-    private CTRE_SpeedControllerGroup driveLeft, driveRight;
+    private WL_TalonSRX driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4;
 
     private WarlordsPIDController angleController;
 
-    private TalonSRX pigeonTalon;
+    private WL_TalonSRX pigeonTalon;
 
     private PigeonIMU pigeonIMU;
 
     public Drivetrain() {
         super();
 
-        this.driveLeftTalonMaster = new TalonSRX(12);
-        this.driveLeftTalon2 = new TalonSRX(13);
-        this.driveLeftTalon3 = new TalonSRX(14);
-        this.driveLeftTalon4 = new TalonSRX(15);
+        this.driveLeftTalonMaster = new WL_TalonSRX(12);
+        this.driveLeftTalon2 = new WL_TalonSRX(13);
+        this.driveLeftTalon3 = new WL_TalonSRX(14);
+        this.driveLeftTalon4 = new WL_TalonSRX(15);
 
+        driveLeftTalonMaster.setFollowers(driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
 
+        this.driveRightTalonMaster = new WL_TalonSRX(4);
+        this.driveRightTalon2 = new WL_TalonSRX(5);
+        this.driveRightTalon3 = new WL_TalonSRX(6);
+        this.driveRightTalon4 = new WL_TalonSRX(7);
 
-        this.driveLeftTalon2.set(ControlMode.Follower,12);
-        this.driveLeftTalon3.set(ControlMode.Follower,12);
-        this.driveLeftTalon4.set(ControlMode.Follower,12);
+        this.driveRightTalonMaster.setFollowers(driveRightTalon2, driveRightTalon3, driveRightTalon4);
 
-        this.driveLeftTalon2.follow(driveLeftTalonMaster);
-        this.driveLeftTalon3.follow(driveLeftTalonMaster);
-        this.driveLeftTalon4.follow(driveLeftTalonMaster);
+        driveLeftTalonMaster.setInverted(true);
 
-        this.driveRightTalonMaster = new TalonSRX(4);
-        this.driveRightTalon2 = new TalonSRX(5);
-        this.driveRightTalon3 = new TalonSRX(6);
-        this.driveRightTalon4 = new TalonSRX(7);
+        this.drive = new DifferentialDrive(driveLeftTalonMaster, driveRightTalonMaster);
 
-        this.driveRightTalon2.set(ControlMode.Follower,4);
-        this.driveRightTalon3.set(ControlMode.Follower,4);
-        this.driveRightTalon4.set(ControlMode.Follower,4);
-
-        this.driveRightTalon2.follow(driveRightTalonMaster);
-        this.driveRightTalon3.follow(driveRightTalonMaster);
-        this.driveRightTalon4.follow(driveRightTalonMaster);
-
-        this.driveLeft = new CTRE_SpeedControllerGroup(driveLeftTalonMaster, driveLeftTalon2, driveLeftTalon3, driveLeftTalon4);
-
-        driveLeft.setInverted(true);
-
-        this.driveRight = new CTRE_SpeedControllerGroup(driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4);
-
-        this.drive = new DifferentialDrive(driveLeft, driveRight);
-        drive.setRightSideInverted(false);
-
-        this.pigeonTalon = new TalonSRX(1);
+        this.pigeonTalon = new WL_TalonSRX(1);
 
         this.pigeonIMU = new PigeonIMU(pigeonTalon);
 
@@ -75,8 +52,8 @@ public class Drivetrain extends SubsystemBase {
 
         addChild("Drive", drive);
         addChild("Angle Controller", angleController);
-        addChild("Left Speed Controllers", driveLeft);
-        addChild("Right Speed Controllers", driveRight);
+        addChild("Left Speed Controllers", driveLeftTalonMaster);
+        addChild("Right Speed Controllers", driveRightTalonMaster);
 
     }
 
@@ -100,8 +77,8 @@ public class Drivetrain extends SubsystemBase {
 
 
 
-        driveRight.set(ControlMode.Current, -output);
-        driveLeft.set(ControlMode.Current, output);
+        driveLeftTalonMaster.set(-output);
+        driveRightTalonMaster.set(output);
     }
 
     public double getAngle() {
