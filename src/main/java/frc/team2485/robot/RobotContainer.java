@@ -17,8 +17,6 @@ import frc.team2485.robot.subsystems.HatchIntakeRollers;
 
 import java.time.Instant;
 
-import static frc.team2485.robot.Constants.CargoRollersConstants.*;
-
 public class RobotContainer {
 
     private XboxController jack;
@@ -93,7 +91,7 @@ public class RobotContainer {
                                                         new InstantCommand(()->cargoRollers.setRollersManual(0.5)),
                                                         new WaitUntilCommand(cargoRollers::isSpiking),
                                                         new ParallelRaceGroup(new WaitUntilCommand(()->!cargoRollers.isSpiking()), new WaitCommand(500)),
-                                                        new IfCommand(new InstantCommand(()->cargoRollers.setRollersManual(0.2)), cargoRollers::isSpiking)));
+                                                        new ConditionalCommand(new InstantCommand(()->cargoRollers.setRollersManual(0.2)), null, cargoRollers::isSpiking)));
 
 
         //cargo outake
