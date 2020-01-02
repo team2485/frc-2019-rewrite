@@ -7,45 +7,85 @@
 
 package frc.team2485.robot;
 
+import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2485.WarlordsLib.robotConfigs.RobotConfigs;
+
 public class Robot extends TimedRobot {
-  /**
-   * This function is run when the robot is first started up and should be used
-   * for any initialization code.
-   */
-  @Override
-  public void robotInit() {
-  }
 
-  @Override
-  public void autonomousInit() {
-  }
+    public RobotContainer robotContainer;
 
-  @Override
-  public void autonomousPeriodic() {
-  }
+    public Command autonomousCommand;
 
-  @Override
-  public void teleopInit() {
-  }
+    Compressor compressor = new Compressor();
 
-  @Override
-  public void teleopPeriodic() {
-  }
+//    public String FILE_PATH = "/home/lvuser/constants.csv";
+    public String FILE_PATH = "constants.csv";
 
-  @Override
-  public void testInit() {
-  }
+    /**
+     * This function is run when the robot is first started up and should be used
+     * for any initialization code.
+     */
+    @Override
+    public void robotInit() {
+        RobotConfigs.getInstance().loadConfigsFromFile(FILE_PATH);
 
-  @Override
-  public void testPeriodic() {
-  }
+        robotContainer = new RobotContainer();
+    }
+
+    @Override
+    public void robotPeriodic() {
+        CommandScheduler.getInstance().run();
+    }
+
+    @Override
+    public void disabledInit() {
+        RobotConfigs.getInstance().saveConfigsToFile(FILE_PATH);
+    }
+
+    @Override
+    public void autonomousInit() {
+
+        compressor.setClosedLoopControl(false);
+
+        autonomousCommand = robotContainer.getAutonomousCommand();
+
+        if (autonomousCommand != null) {
+            autonomousCommand.schedule();
+        }
+
+
+    }
+
+    @Override
+    public void autonomousPeriodic() {
+    }
+
+    @Override
+    public void teleopInit() {
+
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
+
+        compressor.setClosedLoopControl(false);
+    }
+
+    @Override
+    public void teleopPeriodic() {
+    }
+
+    @Override
+    public void testInit() {
+
+//        CommandScheduler.getInstance().cancelAll();
+        compressor.setClosedLoopControl(true);
+    }
+
+    @Override
+    public void testPeriodic() {
+    }
 
 }
