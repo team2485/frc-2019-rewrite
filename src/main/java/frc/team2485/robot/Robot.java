@@ -9,18 +9,10 @@ package frc.team2485.robot;
 
 import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.team2485.WarlordsLib.robotConfigs.RobotConfigurator;
+import frc.team2485.WarlordsLib.robotConfigs.RobotConfigs;
 
-/**
- * The VM is configured to automatically run this class, and to call the
- * functions corresponding to each mode, as described in the TimedRobot
- * documentation. If you change the name of this class or the package after
- * creating this project, you must also update the build.gradle file in the
- * project.
- */
 public class Robot extends TimedRobot {
 
     public RobotContainer robotContainer;
@@ -29,13 +21,16 @@ public class Robot extends TimedRobot {
 
     Compressor compressor = new Compressor();
 
+//    public String FILE_PATH = "/home/lvuser/constants.csv";
+    public String FILE_PATH = "constants.csv";
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
      */
     @Override
     public void robotInit() {
-        RobotConfigurator.getInstance().loadConfigsFromFile("/home/lvuser/constants.csv");
+        RobotConfigs.getInstance().loadConfigsFromFile(FILE_PATH);
 
         robotContainer = new RobotContainer();
     }
@@ -47,7 +42,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        RobotConfigurator.getInstance().saveConfigsToFile("/home/lvuser/constants.csv");
+        RobotConfigs.getInstance().saveConfigsToFile(FILE_PATH);
     }
 
     @Override

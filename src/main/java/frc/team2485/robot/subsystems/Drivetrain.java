@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.team2485.WarlordsLib.control.WarlordsPIDController;
 import frc.team2485.WarlordsLib.motorcontrol.WL_TalonSRX;
+import frc.team2485.WarlordsLib.robotConfigs.RobotConfigs;
 
 public class Drivetrain extends SubsystemBase {
 
@@ -46,7 +47,7 @@ public class Drivetrain extends SubsystemBase {
 
         this.pigeonIMU = new PigeonIMU(pigeonTalon);
 
-        this.angleController = new WarlordsPIDController("Angle Controller", true);
+        this.angleController = new WarlordsPIDController();
 
         angleController.setPercentTolerance(0.05);
 
@@ -55,6 +56,7 @@ public class Drivetrain extends SubsystemBase {
         addChild("Left Speed Controllers", driveLeftTalonMaster);
         addChild("Right Speed Controllers", driveRightTalonMaster);
 
+        RobotConfigs.getInstance().addConfigurable("AngleController", angleController);
     }
 
     public void curvatureDrive(double throttle, double steering, boolean isQuickTurn) {
