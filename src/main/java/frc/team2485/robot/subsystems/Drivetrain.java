@@ -4,7 +4,7 @@ import com.ctre.phoenix.sensors.PigeonIMU;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.team2485.WarlordsLib.control.WarlordsPIDController;
+import frc.team2485.WarlordsLib.control.CoupledPIDController;
 import frc.team2485.WarlordsLib.motorcontrol.WL_TalonSRX;
 import frc.team2485.WarlordsLib.robotConfigs.RobotConfigs;
 
@@ -16,7 +16,7 @@ public class Drivetrain extends SubsystemBase {
 
     private WL_TalonSRX driveRightTalonMaster, driveRightTalon2, driveRightTalon3, driveRightTalon4;
 
-    private WarlordsPIDController angleController;
+    private CoupledPIDController angleController;
 
     private WL_TalonSRX pigeonTalon;
 
@@ -39,15 +39,13 @@ public class Drivetrain extends SubsystemBase {
 
         this.driveRightTalonMaster.setFollowers(driveRightTalon2, driveRightTalon3, driveRightTalon4);
 
-        driveLeftTalonMaster.setInverted(true);
-
         this.drive = new DifferentialDrive(driveLeftTalonMaster, driveRightTalonMaster);
 
         this.pigeonTalon = new WL_TalonSRX(1);
 
         this.pigeonIMU = new PigeonIMU(pigeonTalon);
 
-        this.angleController = new WarlordsPIDController();
+        this.angleController = new CoupledPIDController();
 
         angleController.setPercentTolerance(0.05);
 
@@ -88,7 +86,7 @@ public class Drivetrain extends SubsystemBase {
     }
 
     public boolean angleOnTarget() {
-        return angleController.atSetpoint(0.05, WarlordsPIDController.Tolerance.kPercent);
+        return angleController.atSetpoint(0.05, CoupledPIDController.Tolerance.kPercent);
     }
 
     public void reset() {

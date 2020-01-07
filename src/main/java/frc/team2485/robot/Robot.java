@@ -15,14 +15,13 @@ import frc.team2485.WarlordsLib.robotConfigs.RobotConfigs;
 
 public class Robot extends TimedRobot {
 
-    public RobotContainer robotContainer;
+    private RobotContainer robotContainer;
 
-    public Command autonomousCommand;
+    private Command autonomousCommand;
 
     Compressor compressor = new Compressor();
 
-//    public String FILE_PATH = "/home/lvuser/constants.csv";
-    public String FILE_PATH = "constants.csv";
+    private String filePath;
 
     /**
      * This function is run when the robot is first started up and should be used
@@ -30,7 +29,10 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotInit() {
-        RobotConfigs.getInstance().loadConfigsFromFile(FILE_PATH);
+
+        filePath = isReal() ? "/home/lvuser/constants.csv" : "constants.csv";
+
+        RobotConfigs.getInstance().loadConfigsFromFile(filePath);
 
         robotContainer = new RobotContainer();
     }
@@ -42,7 +44,7 @@ public class Robot extends TimedRobot {
 
     @Override
     public void disabledInit() {
-        RobotConfigs.getInstance().saveConfigsToFile(FILE_PATH);
+        RobotConfigs.getInstance().saveConfigsToFile(filePath);
     }
 
     @Override
