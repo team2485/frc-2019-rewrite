@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.Compressor;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.team2485.WarlordsLib.PeriodicRunner;
 import frc.team2485.WarlordsLib.robotConfigs.RobotConfigs;
 
 public class Robot extends TimedRobot {
@@ -23,6 +24,8 @@ public class Robot extends TimedRobot {
 
     private String filePath;
 
+    private PeriodicRunner configsPoller;
+
     /**
      * This function is run when the robot is first started up and should be used
      * for any initialization code.
@@ -33,6 +36,10 @@ public class Robot extends TimedRobot {
         filePath = isReal() ? "/home/lvuser/constants.csv" : "constants.csv";
 
         RobotConfigs.getInstance().loadConfigsFromFile(filePath);
+
+        configsPoller = new PeriodicRunner(() -> {
+            RobotConfigs.getInstance().loadConfigsFromFile(filePath);
+        }, 1);
 
         robotContainer = new RobotContainer();
     }
@@ -45,6 +52,12 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         RobotConfigs.getInstance().saveConfigsToFile(filePath);
+        configsPoller.init();
+    }
+
+    @Override
+    public void disabledPeriodic() {
+        configsPoller.run();
     }
 
     @Override
